@@ -1,32 +1,32 @@
-# Airbnb Listing Price Prediction — ML Pipeline
+# Airbnb 房源价格预测 — 机器学习流水线
 
-## Overview
+## 项目简介
 
-This project builds a machine learning pipeline to predict Airbnb listing prices using a training dataset. The workflow includes data cleaning, feature engineering, exploratory data analysis, model training, and prediction.
+本项目构建了一套机器学习流水线，用于基于训练数据集预测 Airbnb 房源价格。整体工作流涵盖数据清洗、特征工程、探索性数据分析、模型训练与预测等环节。
 
-The target variable is `log_price`, which represents the logarithm of the Airbnb listing price.
+目标变量为 `log_price`，即 Airbnb 房源价格的对数值。
 
-The implementation is written in Python using libraries such as Pandas, NumPy, Matplotlib, Seaborn, and Scikit-learn.
+项目使用 Python 实现，主要依赖 Pandas、NumPy、Matplotlib、Seaborn 和 Scikit-learn 等库。
 
 ---
 
-## Project Structure
+## 项目结构
 
 ```
 .
-├── Han_WANG.ipynb        # Main notebook containing the full pipeline
-├── airbnb_train.csv      # Training dataset
-├── airbnb_test.csv       # Test dataset
-└── README.md             # Project documentation
+├── Han_WANG.ipynb        # 包含完整流水线的主 Notebook
+├── airbnb_train.csv      # 训练数据集
+├── airbnb_test.csv       # 测试数据集
+└── README.md             # 项目说明文档
 ```
 
 ---
 
-## Workflow
+## 工作流程
 
-### 1. Data Loading
+### 1. 数据加载
 
-The project begins by loading the training and testing datasets using Pandas.
+使用 Pandas 加载训练集和测试集：
 
 ```python
 df_train = pd.read_csv("airbnb_train.csv")
@@ -35,86 +35,86 @@ df_test  = pd.read_csv("airbnb_test.csv")
 
 ---
 
-### 2. Data Cleaning
+### 2. 数据清洗
 
-Several preprocessing steps are applied to improve data quality.
+通过多个预处理步骤提升数据质量。
 
-**Remove Duplicate Rows**  
-Duplicate entries are removed from the training dataset.
+**删除重复行**  
+从训练数据集中移除重复条目。
 
-**Handle Missing Values**  
-Missing numerical values are filled using the median, which is robust to outliers.
+**处理缺失值**  
+使用中位数填充缺失的数值型特征（中位数对异常值具有较强鲁棒性）。
 
-Example features:
-- `bathrooms`
-- `bedrooms`
-- `beds`
+涉及特征示例：
+- `bathrooms`（卫生间数量）
+- `bedrooms`（卧室数量）
+- `beds`（床位数量）
 
 ---
 
-### 3. Feature Engineering
+### 3. 特征工程
 
-Additional features are created to improve model performance.
+构造新特征以提升模型表现。
 
-**Amenities Count**  
-The number of amenities for each listing is calculated:
+**设施数量统计**  
+计算每条房源的设施总数：
 
 ```
-amenities_count = number of items in amenities list
+amenities_count = 设施列表中的项目数量
 ```
 
-**Boolean Mapping**  
-String values such as `t` / `f` and `True` / `False` are converted into boolean values.
+**布尔值映射**  
+将字符串形式的值（如 `t` / `f`、`True` / `False`）转换为布尔类型。
 
-Example columns:
-- `host_has_profile_pic`
-- `host_identity_verified`
-- `instant_bookable`
-
----
-
-### 4. Data Validation
-
-Invalid values are corrected or removed.
-
-- Listings with `accommodates ≤ 0` are removed.
-- Beds or bedrooms with invalid values are corrected.
-
-Text fields are also standardized by:
-- Removing extra spaces
-- Converting to lowercase
+涉及字段示例：
+- `host_has_profile_pic`（房东是否有头像）
+- `host_identity_verified`（房东是否已验证身份）
+- `instant_bookable`（是否支持即时预订）
 
 ---
 
-### 5. Exploratory Data Analysis (EDA)
+### 4. 数据校验
 
-Several visualizations are used to understand the data distribution.
+对无效值进行修正或删除：
 
-**Histogram of Numerical Variables**  
-Helps observe the distribution of features.
+- 删除 `accommodates ≤ 0`（可住人数不合法）的房源记录。
+- 修正床位数或卧室数中的异常值。
 
-**Correlation Heatmap**  
-A heatmap is generated to examine correlations between numerical variables and identify relationships that may influence price prediction.
-
-Libraries used: `Matplotlib`, `Seaborn`
+同时对文本字段进行标准化处理：
+- 去除多余空格
+- 统一转换为小写
 
 ---
 
-### 6. Feature Encoding
+### 5. 探索性数据分析（EDA）
 
-Categorical variables are converted using One-Hot Encoding:
+通过多种可视化方式深入理解数据分布。
+
+**数值变量直方图**  
+观察各特征的分布情况。
+
+**相关性热力图**  
+生成热力图，分析数值变量之间的相关性，识别可能对价格预测产生影响的关联关系。
+
+使用库：`Matplotlib`、`Seaborn`
+
+---
+
+### 6. 特征编码
+
+使用独热编码（One-Hot Encoding）对分类变量进行转换：
 
 ```python
 pd.get_dummies()
 ```
 
-This allows the model to process categorical data.
+使模型能够处理类别型数据。
 
 ---
 
-### 7. Model Training
+### 7. 模型训练
 
-The dataset is split into a **training set** and a **validation set**. The model predicts the target variable:
+将数据集划分为**训练集**和**验证集**，模型对目标变量进行预测：
 
 ```
 log_price
@@ -122,31 +122,31 @@ log_price
 
 ---
 
-### 8. Model Evaluation
+### 8. 模型评估
 
-Two evaluation metrics are used:
+采用两项评估指标：
 
-| Metric | Description |
-|--------|-------------|
-| **RMSE** (Root Mean Squared Error) | Measures prediction error |
-| **R² Score** | Indicates how well the model explains variance in the data |
+| 指标 | 说明 |
+|------|------|
+| **RMSE**（均方根误差） | 衡量预测误差的大小 |
+| **R² 分数** | 反映模型对数据方差的解释能力 |
 
-Example output:
+示例输出：
 
 ```
 RMSE = ...
 R²   = ...
 ```
 
-A scatter plot of true vs. predicted prices is also generated to visualize model performance.
+同时生成真实值与预测值的散点图，直观展示模型性能。
 
 ---
 
-### 9. Prediction on Test Data
+### 9. 测试集预测
 
-The trained model is used to generate predictions for the test dataset. Before prediction:
-- Test features are encoded.
-- Training and test features are aligned:
+使用训练好的模型对测试数据集进行预测。预测前需完成：
+- 对测试集特征进行编码
+- 对齐训练集与测试集的特征列：
 
 ```python
 X_encoded.align(df_test_encoded)
@@ -154,24 +154,24 @@ X_encoded.align(df_test_encoded)
 
 ---
 
-## Technologies Used
+## 技术栈
 
-| Library | Purpose |
-|---------|---------|
-| Python | Core language |
-| Pandas | Data manipulation |
-| NumPy | Numerical computation |
-| Matplotlib | Data visualization |
-| Seaborn | Statistical visualization |
-| Scikit-learn | Model training and evaluation |
+| 库 / 工具 | 用途 |
+|-----------|------|
+| Python | 核心编程语言 |
+| Pandas | 数据处理与分析 |
+| NumPy | 数值计算 |
+| Matplotlib | 数据可视化 |
+| Seaborn | 统计图表绘制 |
+| Scikit-learn | 模型训练与评估 |
 
 ---
 
-## Key Skills Demonstrated
+## 核心技能展示
 
-- Data preprocessing
-- Feature engineering
-- Exploratory data analysis
-- Machine learning workflow
-- Model evaluation
-- Data visualization
+- 数据预处理
+- 特征工程
+- 探索性数据分析
+- 机器学习完整工作流
+- 模型评估与调优
+- 数据可视化
